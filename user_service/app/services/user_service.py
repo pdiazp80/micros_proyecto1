@@ -31,7 +31,21 @@ def get_db():
 
 # Crear las tablas en la base de datos
 def init_db():
-    Base.metadata.create_all(bind=engine)
+    try:
+        print("🔧 Creando tablas en la base de datos...")
+        print(f"📊 URL de BD: {DATABASE_URL}")
+        Base.metadata.create_all(bind=engine)
+        print("✅ Tablas creadas correctamente")
+        
+        # Verificar que las tablas existen
+        from sqlalchemy import inspect
+        inspector = inspect(engine)
+        tables = inspector.get_table_names()
+        print(f"📋 Tablas disponibles: {tables}")
+        
+    except Exception as e:
+        print(f"❌ Error al crear tablas: {str(e)}")
+        raise e
 
 # Manejo de contraseñas
 def hash_password(password: str):
